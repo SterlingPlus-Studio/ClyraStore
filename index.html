@@ -549,6 +549,7 @@
       display: block;
       scrollbar-width: thin;
       scrollbar-color: rgba(134, 247, 210, 0.32) transparent;
+      margin-top: 16px; 
     }
 
     .detail-gallery::-webkit-scrollbar {
@@ -562,15 +563,14 @@
 
     .detail-gallery-track {
       display: flex;
-      gap: 12px;
+      align-items: center; /* Centra verticalmente las horizontales más bajitas con las verticales altas */
+      gap: 6px; /* Espaciado reducido para que estén más pegadas */
       width: max-content;
-      padding-bottom: 4px;
+      padding-bottom: 8px;
     }
 
     .detail-gallery-item {
       flex: 0 0 auto;
-      width: 180px;
-      max-width: 180px;
       background: transparent;
       border: none;
       border-radius: 0;
@@ -578,13 +578,23 @@
       box-shadow: none;
     }
 
+    /* Diseño dinámico basado en límites máximos */
     .detail-gallery-item img {
-      width: 100%;
+      max-height: 260px; /* Restaura la altura alta para las verticales */
+      max-width: 250px;  /* Limita el ancho de las horizontales, obligándolas a encogerse */
+      min-width: 140px;  /* Mantiene las verticales 'gorditas' como querías */
+      width: auto;
       height: auto;
       display: block;
-      border-radius: 0;
-      object-fit: contain;
-      background: transparent;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #1a1a1a;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .detail-gallery-item img:active {
+      transform: scale(0.96);
     }
 
     .detail-download {
@@ -630,9 +640,10 @@
         gap: 8px;
       }
 
-      .detail-gallery-item {
-        width: 150px;
-        max-width: 150px;
+      .detail-gallery-item img {
+        max-height: 220px; /* Altura original restaurada para móviles */
+        max-width: 220px;  
+        min-width: 125px; 
       }
 
       .detail-download {
@@ -641,6 +652,35 @@
         bottom: 14px;
         max-width: calc(100vw - 28px);
       }
+    }
+
+    /* Visor a pantalla completa de las capturas (Lightbox) */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 24px;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    .lightbox-overlay.show {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain; 
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: default;
     }
 </style>
 </head>
@@ -738,6 +778,10 @@
     </div>
     <div class="ad-status" id="adStatus">Toca Ver anuncio, vuelve a la aplicación y el enlace de MediaFire se desbloqueará.</div>
   </div>
+</div>
+
+<div aria-hidden="true" class="lightbox-overlay" id="screenshotLightbox">
+  <img alt="Captura de pantalla ampliada" class="lightbox-img" id="lightboxImg"/>
 </div>
 
 <script>
@@ -931,12 +975,15 @@
     const linkBtn = document.getElementById('linkBtn');
     const adStatus = document.getElementById('adStatus');
 
+    const screenshotLightbox = document.getElementById('screenshotLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+
     const adsterraUrl = 'https://www.effectivecpmnetwork.com/pebktxz1?key=28ccb1c2d5f2bc6691f2610c6b05f11e';
     const defaultDirectLink = 'https://www.mediafire.com/file/ejemplo/archivo.zip/file';
 
     let adWatched = false;
     let awaitingReturn = false;
-    let currentDetailCard = null; // Almacena el objeto de la base de datos
+    let currentDetailCard = null;
 
     // Función para renderizar el HTML basado en los datos
     function renderApps() {
@@ -960,14 +1007,12 @@
           </article>
         `;
 
-        // Se inserta automáticamente en cada sección correspondiente gracias a los 'tags'
         if (app.tags.includes('destacadas')) rowDestacadas.innerHTML += cardHTML;
         if (app.tags.includes('nuevas')) rowNuevas.innerHTML += cardHTML;
         if (app.tags.includes('recomendadas')) rowRecomendadas.innerHTML += cardHTML;
       });
     }
 
-    // Renderizamos las apps al cargar la página
     renderApps();
 
     // ----------------------------------------------------------------------
@@ -987,7 +1032,6 @@
         if (show) visibleCount++;
       });
 
-      // Ocultar la sección entera si no tiene resultados dentro
       document.querySelectorAll('.section').forEach(sec => {
         const row = sec.querySelector('.apps-row');
         const visibleInRow = Array.from(row.querySelectorAll('.app-card')).some(c => !c.classList.contains('hidden'));
@@ -999,7 +1043,6 @@
 
     searchInput.addEventListener('input', filterCards);
 
-    // Evento delegado: escucha clicks en cualquier carta de la app
     contentArea.addEventListener('click', (e) => {
       const cardEl = e.target.closest('.app-card');
       if (!cardEl) return;
@@ -1020,7 +1063,6 @@
       detailAvailableVersion.textContent = app.versionAvailable;
       detailLatestVersion.textContent = app.versionLatest;
 
-      // Renderiza las capturas desde el arreglo 'screenshots' propio de cada app
       if (detailScreenshotsTrack) {
         detailScreenshotsTrack.innerHTML = app.screenshots.map((src, index) => `
           <div class="detail-gallery-item">
@@ -1119,6 +1161,21 @@
         watchAdBtn.textContent = 'Ver anuncio';
         closeAdModal();
       }
+    });
+
+    // Lógica para abrir y cerrar el Lightbox al tocar las capturas de pantalla
+    detailScreenshotsTrack.addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG') {
+        lightboxImg.src = e.target.src;
+        screenshotLightbox.classList.add('show');
+        screenshotLightbox.setAttribute('aria-hidden', 'false');
+      }
+    });
+
+    screenshotLightbox.addEventListener('click', () => {
+      screenshotLightbox.classList.remove('show');
+      screenshotLightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.src = ''; 
     });
 </script>
 </body>
