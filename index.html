@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -43,6 +42,8 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'FuenteClyra', Arial, Helvetica, sans-serif;
+      max-width: 100vw;
+      overflow-x: hidden;
     }
 
     body {
@@ -53,16 +54,19 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
     }
 
     .topbar {
       position: sticky;
       top: 0;
       z-index: 20;
-      background: linear-gradient(180deg, #0d0d0d 0%, #111111 100%);
+      background: #050505;
       border-bottom: 1px solid var(--border);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.38);
+      box-shadow: none;
       padding: 14px;
+      width: 100%;
     }
 
     .topbar-row {
@@ -78,6 +82,7 @@
       letter-spacing: 0.2px;
       color: var(--text);
       line-height: 1;
+      text-transform: capitalize;
     }
 
     .search-box {
@@ -109,11 +114,15 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 12px;
+      width: 100%;
+      max-width: 100%;
     }
 
     .section {
       background: transparent;
+      width: 100%;
+      max-width: 100%;
     }
 
     .section-header {
@@ -144,6 +153,7 @@
       padding: 2px 2px 8px;
       scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
+      width: 100%;
     }
 
     .apps-row::-webkit-scrollbar {
@@ -168,6 +178,7 @@
       scroll-snap-align: start;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
 
     .app-image {
@@ -198,6 +209,7 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      text-transform: capitalize;
     }
 
     .app-desc {
@@ -357,223 +369,562 @@
       color: #a8ff8f;
     }
 
-  </style>
+    /* Detalle a pantalla completa */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: #050505;
+      display: none;
+      z-index: 9998;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      max-width: 100vw;
+    }
+
+    .detail-overlay.show {
+      display: block;
+    }
+
+    .detail-shell {
+      min-height: 100vh;
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: visible;
+      padding-bottom: 12px;
+    }
+
+    .detail-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #050505;
+      border-bottom: 1px solid var(--border);
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .detail-topbar > div {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .detail-subtitle { display: none !important; }
+
+    .detail-close {
+      border: none;
+      border-radius: 999px;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      background: #262626;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .detail-main {
+      padding: 16px 16px 96px;
+      display: flex; 
+      flex-direction: column;
+      gap: 16px;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    .detail-main > div,
+    .detail-main > button {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .detail-hero {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #111;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .detail-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .detail-title {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 900;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      max-width: 100%;
+      text-transform: capitalize;
+    }
+
+    .detail-desc {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+      max-width: 100%;
+    }
+
+    .detail-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .detail-info:last-child {
+      grid-column: span 2;
+    }
+
+    .detail-info {
+      border-radius: 18px;
+      background: #111111;
+      border: 1px solid var(--border);
+      padding: 12px;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+
+    .detail-info-label {
+      display: block;
+      font-size: 12px;
+      color: #9aa0ad;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .detail-info-value {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-section-title {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .detail-gallery {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: block;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(134, 247, 210, 0.32) transparent;
+    }
+
+    .detail-gallery::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .detail-gallery::-webkit-scrollbar-thumb {
+      background: rgba(134, 247, 210, 0.32);
+      border-radius: 999px;
+    }
+
+    .detail-gallery-track {
+      display: flex;
+      gap: 12px;
+      width: max-content;
+      padding-bottom: 4px;
+    }
+
+    .detail-gallery-item {
+      flex: 0 0 auto;
+      width: 180px;
+      max-width: 180px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      overflow: visible;
+      box-shadow: none;
+    }
+
+    .detail-gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0;
+      object-fit: contain;
+      background: transparent;
+    }
+
+    .detail-download {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 5;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #101010;
+      font-size: 15px;
+      font-weight: 900;
+      font-family: 'FuenteClyra', Arial, Helvetica, sans-serif;
+      cursor: pointer;
+      width: auto;
+      box-sizing: border-box;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      max-width: none;
+      max-width: calc(100vw - 32px);
+    }
+
+    .detail-download:active {
+      transform: scale(0.99);
+    }
+
+    .detail-download,
+    .detail-download * {
+      font-family: 'FuenteClyra', Arial, Helvetica, sans-serif !important;
+    }
+
+    @media (max-width: 640px) {
+      .detail-title {
+        font-size: 24px;
+      }
+      .detail-main {
+        padding: 14px 14px 92px;
+      }
+      .detail-topbar {
+        padding: 12px 14px;
+        gap: 8px;
+      }
+
+      .detail-gallery-item {
+        width: 150px;
+        max-width: 150px;
+      }
+
+      .detail-download {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        max-width: calc(100vw - 28px);
+      }
+    }
+</style>
 </head>
 <body>
 <div class="app">
-<header class="topbar">
-<div class="topbar-row">
-<div class="brand">ClyraStore</div>
-<input aria-label="Buscar aplicaciones" class="search-box" id="searchInput" placeholder="Buscar aplicaciones..." type="search"/>
-</div>
-</header>
-<main class="content" id="content">
-<section class="section">
-<div class="section-header">
-<div>
-<h2 class="section-title">Destacadas</h2>
-<p class="section-subtitle">Aplicaciones más populares</p>
-</div>
-</div>
-<div class="apps-row" data-section="0"><article class="app-card" data-app-desc="succubus hunt se desarrolla en un mundo donde las chicas monstruo son increíblemente comunes, ¡y tú eres el único hombre humano!" data-app-name="succubus hunt" data-direct-link="https://www.mediafire.com/file/uh5ka3fatjct6mc/v1.52_SucHun.apk/file">
-<img alt="Succubus Hunt" class="app-image" src="https://i.ibb.co/G3rQ1mpC/Portada.png"/>
-<div class="app-body">
-<h3 class="app-name">Succubus Hunt</h3>
-<p class="app-desc">Succubus Hunt se desarrolla en un mundo donde las chicas monstruo son increíblemente comunes, ¡y tú eres el único hombre humano!</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article><article class="app-card" data-app-desc="te mudas a una nueva ciudad y te instalas en una nueva casa antes de empezar la universidad, intentando adaptarte a tu nueva vida y forjar nuevas relaciones." data-app-name="town’s charm" data-direct-link="https://www.mediafire.com/file/mt6sn05tpui2ni9/TC_v0.6.5.apk/file">
-<img alt="Town’s Charm" class="app-image" src="https://i.ibb.co/1Ybc3t80/Portada-1.png"/>
-<div class="app-body">
-<h3 class="app-name">Town’s Charm</h3>
-<p class="app-desc">Te mudas a una nueva ciudad y te instalas en una nueva casa antes de empezar la universidad, intentando adaptarte a tu nueva vida y forjar nuevas relaciones.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="de repente, despiertas en medio de un bosque. frente a ti, una pequeña hada está siendo atacada por un orco. tras rescatarla, ella ve tu fuerza y te ruega que salves este mundo." data-app-name="honey village" data-direct-link="https://www.mediafire.com/file/n31hql7oyy8l887/HoVi.apk/file">
-<img alt="Honey Village" class="app-image" src="https://i.ibb.co/67KG3vnf/Portada-1280x720.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Honey Village</h3>
-<p class="app-desc">De repente, despiertas en medio de un bosque. Frente a ti, una pequeña hada está siendo atacada por un orco. Tras rescatarla, ella ve tu fuerza y te ruega que salves este mundo.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="eres el brujo humano más poderoso que el mundo haya conocido, pero tu poder genera celos y lujuria. las súcubos quieren tu poder para sí mismas, pero ¿por qué? ¿qué oscuro propósito impulsa su engaño?" data-app-name="magical monstergirls academy" data-direct-link="https://www.mediafire.com/file/roftwup2onjunfz/MagMonAca_4.1.apk/file">
-<img alt="Magical Monstergirls Academy" class="app-image" src="https://i.ibb.co/svMWdVDM/Portada.gif"/>
-<div class="app-body">
-<h3 class="app-name">Magical Monstergirls Academy</h3>
-<p class="app-desc">Eres el brujo humano más poderoso que el mundo haya conocido, pero tu poder genera celos y lujuria. Las súcubos quieren tu poder para sí mismas, pero ¿por qué? ¿Qué oscuro propósito impulsa su engaño?</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="en un pequeño pueblo, comenzaste a trabajar como guardia de seguridad y decidiste, por diversión, revisar las grabaciones de las cámaras de seguridad." data-app-name="back alley tales" data-direct-link="https://www.mediafire.com/file/bk2b9bqtz4n1nk4/URJJ.apk/file">
-<img alt="Back Alley Tales" class="app-image" src="https://i.ibb.co/LD1ZnpfY/Portada.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Back Alley Tales</h3>
-<p class="app-desc">En un pequeño pueblo, comenzaste a trabajar como guardia de seguridad y decidiste, por diversión, revisar las grabaciones de las cámaras de seguridad.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">ClyraStore</div>
+      <input aria-label="Buscar aplicaciones" class="search-box" id="searchInput" placeholder="Buscar aplicaciones..." type="search"/>
+    </div>
+  </header>
+  
+  <main class="content" id="content">
+    
+    <section class="section" id="section-destacadas">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Destacadas</h2>
+          <p class="section-subtitle">Aplicaciones más populares</p>
+        </div>
+      </div>
+      <div class="apps-row" id="row-destacadas"></div>
+    </section>
 
+    <section class="section" id="section-nuevas">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Nuevas</h2>
+          <p class="section-subtitle">Lo último que llegó a la tienda</p>
+        </div>
+      </div>
+      <div class="apps-row" id="row-nuevas"></div>
+    </section>
 
+    <section class="section" id="section-recomendadas">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Recomendadas</h2>
+          <p class="section-subtitle">Apps que combinan con tu estilo</p>
+        </div>
+      </div>
+      <div class="apps-row" id="row-recomendadas"></div>
+    </section>
 
+    <div class="empty-state" id="emptyState">No se encontraron aplicaciones con esa búsqueda.</div>
+  </main>
+</div>
 
+<div aria-hidden="true" class="detail-overlay" id="detailModal">
+  <div aria-labelledby="detailTitle" aria-modal="true" class="detail-shell" role="dialog">
+    <div class="detail-topbar">
+      <div>
+        <div class="brand" id="detailBrand">Detalles</div>
+      </div>
+      <button aria-label="Cerrar detalles" class="detail-close" id="detailCloseBtn" type="button">×</button>
+    </div>
+    <div class="detail-main">
+      <div class="detail-hero"><img alt="" id="detailHero"/></div>
+      <div>
+        <h1 class="detail-title" id="detailTitle"></h1>
+        <p class="detail-desc" id="detailDesc"></p>
+      </div>
+      <div class="detail-info-grid">
+        <div class="detail-info">
+          <span class="detail-info-label">Peso</span>
+          <div class="detail-info-value" id="detailWeight">—</div>
+        </div>
+        <div class="detail-info">
+          <span class="detail-info-label">Versión de android</span>
+          <div class="detail-info-value" id="detailAvailableVersion">—</div>
+        </div>
+        <div class="detail-info">
+          <span class="detail-info-label">Última versión</span>
+          <div class="detail-info-value" id="detailLatestVersion">—</div>
+        </div>
+      </div>
+      <div>
+        <h2 class="detail-section-title">Capturas</h2>
+        <div aria-label="Capturas de pantalla" class="detail-gallery" id="detailScreenshotsGallery">
+          <div class="detail-gallery-track" id="detailScreenshotsTrack"></div>
+        </div>
+      </div>
+      <button class="detail-download" id="detailDownloadBtn" type="button">Descargar</button>
+    </div>
+  </div>
 </div>
-</section>
-<section class="section">
-<div class="section-header">
-<div>
-<h2 class="section-title">Nuevas</h2>
-<p class="section-subtitle">Lo último que llegó a la tienda</p>
-</div>
-</div>
-<div class="apps-row" data-section="1"><article class="app-card" data-app-desc="conviértete en el guardián de la Nación Agnar y lucha por la seguridad de sus ciudadanos." data-app-name="permit, deny" data-direct-link="https://www.mediafire.com/file/b63hem9jsfb7rzq/PD_2025-11-11.apk/file">
-<img alt="Permit, Deny" class="app-image" src="https://i.ibb.co/zWJKdKvZ/Portada-1-1.png"/>
-<div class="app-body">
-<h3 class="app-name">Permit, Deny</h3>
-<p class="app-desc">Conviértete en el guardián de la Nación Agnar y lucha por la seguridad de sus ciudadanos.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article><article class="app-card" data-app-desc="abandonados en la enorme mansión mientras nuestros padres están de viaje de negocios, solo estamos mi hermana menor y yo." data-app-name="intimate days with my tsundere sister" data-direct-link="https://www.mediafire.com/file/3e9m66xaoh2ujey/IDwMTS_v0.3.1.apk/file">
-<img alt="Intimate Days with My Tsundere Sister" class="app-image" src="https://i.ibb.co/XZcwy8Yg/Portada-1.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Intimate Days with My Tsundere Sister</h3>
-<p class="app-desc">Abandonados en la enorme mansión mientras nuestros padres están de viaje de negocios, solo estamos mi hermana menor y yo.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="tras años pudriéndose en su habitación, chiro finalmente es echada de su casa por ser una jugadora sucia, inútil y socialmente torpe." data-app-name="gamer struggles" data-direct-link="https://www.mediafire.com/file/s4yt2097wuoucsw/GS_0.1.8.3.apk/file">
-<img alt="Gamer Struggles" class="app-image" src="https://i.ibb.co/JwhRgSGc/Portada-1536x384.png"/>
-<div class="app-body">
-<h3 class="app-name">Gamer Struggles</h3>
-<p class="app-desc">Tras años pudriéndose en su habitación, Chiro finalmente es echada de su casa por ser una jugadora sucia, inútil y socialmente torpe.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article><article class="app-card" data-app-desc="te mudas a una nueva ciudad y te instalas en una nueva casa antes de empezar la universidad, intentando adaptarte a tu nueva vida y forjar nuevas relaciones." data-app-name="town’s charm" data-direct-link="https://www.mediafire.com/file/mt6sn05tpui2ni9/TC_v0.6.5.apk/file">
-<img alt="Town’s Charm" class="app-image" src="https://i.ibb.co/1Ybc3t80/Portada-1.png"/>
-<div class="app-body">
-<h3 class="app-name">Town’s Charm</h3>
-<p class="app-desc">Te mudas a una nueva ciudad y te instalas en una nueva casa antes de empezar la universidad, intentando adaptarte a tu nueva vida y forjar nuevas relaciones.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="de repente, despiertas en medio de un bosque. frente a ti, una pequeña hada está siendo atacada por un orco. tras rescatarla, ella ve tu fuerza y te ruega que salves este mundo." data-app-name="honey village" data-direct-link="https://www.mediafire.com/file/n31hql7oyy8l887/HoVi.apk/file">
-<img alt="Honey Village" class="app-image" src="https://i.ibb.co/67KG3vnf/Portada-1280x720.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Honey Village</h3>
-<p class="app-desc">De repente, despiertas en medio de un bosque. Frente a ti, una pequeña hada está siendo atacada por un orco. Tras rescatarla, ella ve tu fuerza y te ruega que salves este mundo.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="eres el brujo humano más poderoso que el mundo haya conocido, pero tu poder genera celos y lujuria. las súcubos quieren tu poder para sí mismas, pero ¿por qué? ¿qué oscuro propósito impulsa su engaño?" data-app-name="magical monstergirls academy" data-direct-link="https://www.mediafire.com/file/roftwup2onjunfz/MagMonAca_4.1.apk/file">
-<img alt="Magical Monstergirls Academy" class="app-image" src="https://i.ibb.co/svMWdVDM/Portada.gif"/>
-<div class="app-body">
-<h3 class="app-name">Magical Monstergirls Academy</h3>
-<p class="app-desc">Eres el brujo humano más poderoso que el mundo haya conocido, pero tu poder genera celos y lujuria. Las súcubos quieren tu poder para sí mismas, pero ¿por qué? ¿Qué oscuro propósito impulsa su engaño?</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="dame más de eso, sensei. me llegó un mensaje mientras estaba trabajando." data-app-name="milk time" data-direct-link="https://www.mediafire.com/file/zg68b32856fpbs5/mi_ti.apk/file">
-<img alt="Milk Time" class="app-image" src="https://i.ibb.co/Q7JQzV5X/Portada-2.png"/>
-<div class="app-body">
-<h3 class="app-name">Milk Time</h3>
-<p class="app-desc">Dame más de eso, Sensei. Me llegó un mensaje mientras estaba trabajando.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="colección de 8 juegos flash de mew games." data-app-name="colección de juegos flash" data-direct-link="https://www.mediafire.com/file/gg8mwllu6wbg6hy/Pack_apk_%2528Eros_Games_Room%2529.rar/file">
-<img alt="Colección de juegos Flash" class="app-image" src="https://i.ibb.co/fdmyQSCr/Portada.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Colección de juegos Flash</h3>
-<p class="app-desc">Colección de 8 juegos Flash de Mew Games.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="en un pequeño pueblo, comenzaste a trabajar como guardia de seguridad y decidiste, por diversión, revisar las grabaciones de las cámaras de seguridad." data-app-name="back alley tales" data-direct-link="https://www.mediafire.com/file/bk2b9bqtz4n1nk4/URJJ.apk/file">
-<img alt="Back Alley Tales" class="app-image" src="https://i.ibb.co/LD1ZnpfY/Portada.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Back Alley Tales</h3>
-<p class="app-desc">En un pequeño pueblo, comenzaste a trabajar como guardia de seguridad y decidiste, por diversión, revisar las grabaciones de las cámaras de seguridad.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
 
-
-
-
-</div>
-</section>
-<section class="section">
-<div class="section-header">
-<div>
-<h2 class="section-title">Recomendadas</h2>
-<p class="section-subtitle">Apps que combinan con tu estilo</p>
-</div>
-</div>
-<div class="apps-row" data-section="2"><article class="app-card" data-app-desc="abandonados en la enorme mansión mientras nuestros padres están de viaje de negocios, solo estamos mi hermana menor y yo." data-app-name="intimate days with my tsundere sister" data-direct-link="https://www.mediafire.com/file/3e9m66xaoh2ujey/IDwMTS_v0.3.1.apk/file">
-<img alt="Intimate Days with My Tsundere Sister" class="app-image" src="https://i.ibb.co/XZcwy8Yg/Portada-1.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Intimate Days with My Tsundere Sister</h3>
-<p class="app-desc">Abandonados en la enorme mansión mientras nuestros padres están de viaje de negocios, solo estamos mi hermana menor y yo.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="te mudas a una nueva ciudad y te instalas en una nueva casa antes de empezar la universidad, intentando adaptarte a tu nueva vida y forjar nuevas relaciones." data-app-name="town’s charm" data-direct-link="https://www.mediafire.com/file/mt6sn05tpui2ni9/TC_v0.6.5.apk/file">
-<img alt="Town’s Charm" class="app-image" src="https://i.ibb.co/1Ybc3t80/Portada-1.png"/>
-<div class="app-body">
-<h3 class="app-name">Town’s Charm</h3>
-<p class="app-desc">Te mudas a una nueva ciudad y te instalas en una nueva casa antes de empezar la universidad, intentando adaptarte a tu nueva vida y forjar nuevas relaciones.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="de repente, despiertas en medio de un bosque. frente a ti, una pequeña hada está siendo atacada por un orco. tras rescatarla, ella ve tu fuerza y te ruega que salves este mundo." data-app-name="honey village" data-direct-link="https://www.mediafire.com/file/n31hql7oyy8l887/HoVi.apk/file">
-<img alt="Honey Village" class="app-image" src="https://i.ibb.co/67KG3vnf/Portada-1280x720.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Honey Village</h3>
-<p class="app-desc">De repente, despiertas en medio de un bosque. Frente a ti, una pequeña hada está siendo atacada por un orco. Tras rescatarla, ella ve tu fuerza y te ruega que salves este mundo.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="dame más de eso, sensei. me llegó un mensaje mientras estaba trabajando." data-app-name="milk time" data-direct-link="https://www.mediafire.com/file/zg68b32856fpbs5/mi_ti.apk/file">
-<img alt="Milk Time" class="app-image" src="https://i.ibb.co/Q7JQzV5X/Portada-2.png"/>
-<div class="app-body">
-<h3 class="app-name">Milk Time</h3>
-<p class="app-desc">Dame más de eso, Sensei. Me llegó un mensaje mientras estaba trabajando.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-<article class="app-card" data-app-desc="colección de 8 juegos flash de mew games." data-app-name="colección de juegos flash" data-direct-link="https://www.mediafire.com/file/gg8mwllu6wbg6hy/Pack_apk_%2528Eros_Games_Room%2529.rar/file">
-<img alt="Colección de juegos Flash" class="app-image" src="https://i.ibb.co/fdmyQSCr/Portada.jpg"/>
-<div class="app-body">
-<h3 class="app-name">Colección de juegos Flash</h3>
-<p class="app-desc">Colección de 8 juegos Flash de Mew Games.</p>
-<button class="install-btn" type="button">Instalar</button>
-</div>
-</article>
-
-
-
-
-</div>
-</section>
-<div class="empty-state" id="emptyState">No se encontraron aplicaciones con esa búsqueda.</div>
-</main>
-</div>
 <div aria-hidden="true" class="modal-overlay" id="adModal">
-<div aria-labelledby="adModalTitle" aria-modal="true" class="modal-box" role="dialog">
-<h3 class="modal-title" id="adModalTitle">Ver anuncio para continuar</h3>
-<p class="modal-text">Cuando toques Ver anuncio se abrirá el anuncio en otra pestaña. Después vuelve a la aplicación y el enlace de MediaFire se desbloqueará.</p>
-<div class="modal-actions">
-<button class="modal-btn ad" id="watchAdBtn" type="button">Ver anuncio</button>
-<button class="modal-btn link" disabled="" id="linkBtn" type="button">Botón de enlace bloqueado</button>
+  <div aria-labelledby="adModalTitle" aria-modal="true" class="modal-box" role="dialog">
+    <h3 class="modal-title" id="adModalTitle">Ver anuncio para continuar</h3>
+    <p class="modal-text">Cuando toques Ver anuncio se abrirá el anuncio en otra pestaña. Después vuelve a la aplicación y el enlace de MediaFire se desbloqueará.</p>
+    <div class="modal-actions">
+      <button class="modal-btn ad" id="watchAdBtn" type="button">Ver anuncio</button>
+      <button class="modal-btn link" disabled="" id="linkBtn" type="button">Botón de enlace bloqueado</button>
+    </div>
+    <div class="ad-status" id="adStatus">Toca Ver anuncio, vuelve a la aplicación y el enlace de MediaFire se desbloqueará.</div>
+  </div>
 </div>
-<div class="ad-status" id="adStatus">Toca Ver anuncio, vuelve a la aplicación y el enlace de MediaFire se desbloqueará.</div>
-</div>
-</div>
+
 <script>
+    // ----------------------------------------------------------------------
+    // 1. BASE DE DATOS DE APLICACIONES (El "cajón" central de datos)
+    // Aquí defines la información UNA SOLA VEZ y controlas dónde sale con "tags"
+    // ----------------------------------------------------------------------
+    const appsDatabase = [
+      {
+        id: "succubus-hunt",
+        name: "Succubus Hunt",
+        desc: "Succubus Hunt se desarrolla en un mundo donde las chicas monstruo son increíblemente comunes, ¡y tú eres el único hombre humano!",
+        image: "https://i.ibb.co/G3rQ1mpC/Portada.png",
+        screenshots: [
+          "https://i.ibb.co/G3rQ1mpC/Portada.png",
+          "https://i.ibb.co/G3rQ1mpC/Portada.png",
+          "https://i.ibb.co/G3rQ1mpC/Portada.png"
+        ],
+        directLink: "https://www.mediafire.com/file/uh5ka3fatjct6mc/v1.52_SucHun.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "v1.52",
+        weight: "No especificado",
+        tags: ["destacadas"]
+      },
+      {
+        id: "towns-charm",
+        name: "Town’s Charm",
+        desc: "Te mudas a una nueva ciudad y te instalas en una nueva casa antes de empezar la universidad, intentando adaptarte a tu nueva vida y forjar nuevas relaciones.",
+        image: "https://i.ibb.co/1Ybc3t80/Portada-1.png",
+        screenshots: [
+          "https://i.ibb.co/1Ybc3t80/Portada-1.png",
+          "https://i.ibb.co/1Ybc3t80/Portada-1.png",
+          "https://i.ibb.co/1Ybc3t80/Portada-1.png"
+        ],
+        directLink: "https://www.mediafire.com/file/mt6sn05tpui2ni9/TC_v0.6.5.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "v0.6.5",
+        weight: "No especificado",
+        tags: ["destacadas", "nuevas", "recomendadas"]
+      },
+      {
+        id: "honey-village",
+        name: "Honey Village",
+        desc: "De repente, despiertas en medio de un bosque. Frente a ti, una pequeña hada está siendo atacada por un orco. Tras rescatarla, ella ve tu fuerza y te ruega que salves este mundo.",
+        image: "https://i.ibb.co/67KG3vnf/Portada-1280x720.jpg",
+        screenshots: [
+          "https://i.ibb.co/67KG3vnf/Portada-1280x720.jpg",
+          "https://i.ibb.co/67KG3vnf/Portada-1280x720.jpg",
+          "https://i.ibb.co/67KG3vnf/Portada-1280x720.jpg"
+        ],
+        directLink: "https://www.mediafire.com/file/n31hql7oyy8l887/HoVi.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "No especificada",
+        weight: "No especificado",
+        tags: ["destacadas", "nuevas", "recomendadas"]
+      },
+      {
+        id: "magical-monstergirls",
+        name: "Magical Monstergirls Academy",
+        desc: "Eres el brujo humano más poderoso que el mundo haya conocido, pero tu poder genera celos y lujuria. Las súcubos quieren tu poder para sí mismas, pero ¿por qué? ¿Qué oscuro propósito impulsa su engaño?",
+        image: "https://i.ibb.co/svMWdVDM/Portada.gif",
+        screenshots: [
+          "https://i.ibb.co/svMWdVDM/Portada.gif",
+          "https://i.ibb.co/svMWdVDM/Portada.gif",
+          "https://i.ibb.co/svMWdVDM/Portada.gif"
+        ],
+        directLink: "https://www.mediafire.com/file/roftwup2onjunfz/MagMonAca_4.1.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "v4.1",
+        weight: "No especificado",
+        tags: ["destacadas", "nuevas"]
+      },
+      {
+        id: "back-alley-tales",
+        name: "Back Alley Tales",
+        desc: "En un pequeño pueblo, comenzaste a trabajar como guardia de seguridad y decidiste, por diversión, revisar las grabaciones de las cámaras de seguridad.",
+        image: "https://i.ibb.co/LD1ZnpfY/Portada.jpg",
+        screenshots: [
+          "https://i.ibb.co/LD1ZnpfY/Portada.jpg",
+          "https://i.ibb.co/LD1ZnpfY/Portada.jpg",
+          "https://i.ibb.co/LD1ZnpfY/Portada.jpg"
+        ],
+        directLink: "https://www.mediafire.com/file/bk2b9bqtz4n1nk4/URJJ.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "No especificada",
+        weight: "No especificado",
+        tags: ["destacadas", "nuevas"]
+      },
+      {
+        id: "permit-deny",
+        name: "Permit, Deny",
+        desc: "Conviértete en el guardián de la Nación Agnar y lucha por la seguridad de sus ciudadanos.",
+        image: "https://i.ibb.co/zWJKdKvZ/Portada-1-1.png",
+        screenshots: [
+          "https://i.ibb.co/zWJKdKvZ/Portada-1-1.png",
+          "https://i.ibb.co/zWJKdKvZ/Portada-1-1.png",
+          "https://i.ibb.co/zWJKdKvZ/Portada-1-1.png"
+        ],
+        directLink: "https://www.mediafire.com/file/b63hem9jsfb7rzq/PD_2025-11-11.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "v2025.11.11",
+        weight: "21 MB",
+        tags: ["nuevas"]
+      },
+      {
+        id: "intimate-days",
+        name: "Intimate Days with My Tsundere Sister",
+        desc: "Abandonados en la enorme mansión mientras nuestros padres están de viaje de negocios, solo estamos mi hermana menor y yo. Aunque suele ser distante conmigo, muestra una faceta diferente en las noches que estamos a solas.",
+        image: "https://i.ibb.co/XZcwy8Yg/Portada-1.jpg",
+        screenshots: [
+          "https://i.ibb.co/XZcwy8Yg/Portada-1.jpg",
+          "https://i.ibb.co/XZcwy8Yg/Portada-1.jpg",
+          "https://i.ibb.co/XZcwy8Yg/Portada-1.jpg"
+        ],
+        directLink: "https://www.mediafire.com/file/3e9m66xaoh2ujey/IDwMTS_v0.3.1.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "v0.3.1",
+        weight: "539 MB",
+        tags: ["nuevas", "recomendadas"]
+      },
+      {
+        id: "gamer-struggles",
+        name: "Gamer Struggles",
+        desc: "Tras años pudriéndose en su habitación, Chiro finalmente es echada de su casa por ser una jugadora sucia, inútil y socialmente torpe. ¿Cambiará su forma de ser y se integrará a la sociedad, o se hundirá aún más en la degeneración?",
+        image: "https://i.ibb.co/JwhRgSGc/Portada-1536x384.png",
+        screenshots: [
+          "https://i.ibb.co/JwhRgSGc/Portada-1536x384.png",
+          "https://i.ibb.co/JwhRgSGc/Portada-1536x384.png",
+          "https://i.ibb.co/JwhRgSGc/Portada-1536x384.png"
+        ],
+        directLink: "https://www.mediafire.com/file/s4yt2097wuoucsw/GS_0.1.8.3.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "v0.1.8.3",
+        weight: "188 MB",
+        tags: ["nuevas"]
+      },
+      {
+        id: "milk-time",
+        name: "Milk Time",
+        desc: "Dame más de eso, Sensei. Me llegó un mensaje mientras estaba trabajando.",
+        image: "https://i.ibb.co/Q7JQzV5X/Portada-2.png",
+        screenshots: [
+          "https://i.ibb.co/Q7JQzV5X/Portada-2.png",
+          "https://i.ibb.co/Q7JQzV5X/Portada-2.png",
+          "https://i.ibb.co/Q7JQzV5X/Portada-2.png"
+        ],
+        directLink: "https://www.mediafire.com/file/zg68b32856fpbs5/mi_ti.apk/file",
+        versionAvailable: "5+",
+        versionLatest: "No especificada",
+        weight: "No especificado",
+        tags: ["nuevas", "recomendadas"]
+      },
+      {
+        id: "juegos-flash",
+        name: "Colección de juegos Flash",
+        desc: "Colección de 8 juegos Flash de Mew Games.",
+        image: "https://i.ibb.co/fdmyQSCr/Portada.jpg",
+        screenshots: [
+          "https://i.ibb.co/fdmyQSCr/Portada.jpg",
+          "https://i.ibb.co/fdmyQSCr/Portada.jpg",
+          "https://i.ibb.co/fdmyQSCr/Portada.jpg"
+        ],
+        directLink: "https://www.mediafire.com/file/gg8mwllu6wbg6hy/Pack_apk_%2528Eros_Games_Room%2529.rar/file",
+        versionAvailable: "5+",
+        versionLatest: "No especificada",
+        weight: "No especificado",
+        tags: ["nuevas", "recomendadas"]
+      }
+    ];
+
+    // ----------------------------------------------------------------------
+    // 2. REFERENCIAS Y GENERACIÓN DINÁMICA
+    // ----------------------------------------------------------------------
     const searchInput = document.getElementById('searchInput');
-    const cards = Array.from(document.querySelectorAll('.app-card'));
     const emptyState = document.getElementById('emptyState');
+    const contentArea = document.getElementById('content');
+
+    const detailModal = document.getElementById('detailModal');
+    const detailCloseBtn = document.getElementById('detailCloseBtn');
+    const detailHero = document.getElementById('detailHero');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailDesc = document.getElementById('detailDesc');
+    const detailWeight = document.getElementById('detailWeight');
+    const detailAvailableVersion = document.getElementById('detailAvailableVersion');
+    const detailLatestVersion = document.getElementById('detailLatestVersion');
+    const detailScreenshotsTrack = document.getElementById('detailScreenshotsTrack');
+    const detailDownloadBtn = document.getElementById('detailDownloadBtn');
 
     const adModal = document.getElementById('adModal');
     const watchAdBtn = document.getElementById('watchAdBtn');
@@ -583,26 +934,129 @@
     const adsterraUrl = 'https://www.effectivecpmnetwork.com/pebktxz1?key=28ccb1c2d5f2bc6691f2610c6b05f11e';
     const defaultDirectLink = 'https://www.mediafire.com/file/ejemplo/archivo.zip/file';
 
-    let pendingCard = null;
     let adWatched = false;
     let awaitingReturn = false;
+    let currentDetailCard = null; // Almacena el objeto de la base de datos
 
+    // Función para renderizar el HTML basado en los datos
+    function renderApps() {
+      const rowDestacadas = document.getElementById('row-destacadas');
+      const rowNuevas = document.getElementById('row-nuevas');
+      const rowRecomendadas = document.getElementById('row-recomendadas');
+
+      rowDestacadas.innerHTML = '';
+      rowNuevas.innerHTML = '';
+      rowRecomendadas.innerHTML = '';
+
+      appsDatabase.forEach(app => {
+        const cardHTML = `
+          <article class="app-card" data-id="${app.id}">
+            <img alt="${app.name}" class="app-image" src="${app.image}"/>
+            <div class="app-body">
+              <h3 class="app-name">${app.name}</h3>
+              <p class="app-desc">${app.desc}</p>
+              <button class="install-btn" type="button">Ver detalles</button>
+            </div>
+          </article>
+        `;
+
+        // Se inserta automáticamente en cada sección correspondiente gracias a los 'tags'
+        if (app.tags.includes('destacadas')) rowDestacadas.innerHTML += cardHTML;
+        if (app.tags.includes('nuevas')) rowNuevas.innerHTML += cardHTML;
+        if (app.tags.includes('recomendadas')) rowRecomendadas.innerHTML += cardHTML;
+      });
+    }
+
+    // Renderizamos las apps al cargar la página
+    renderApps();
+
+    // ----------------------------------------------------------------------
+    // 3. LÓGICA DE BÚSQUEDA Y MODALES
+    // ----------------------------------------------------------------------
     function filterCards() {
       const q = searchInput.value.trim().toLowerCase();
       let visibleCount = 0;
+      const allRenderedCards = document.querySelectorAll('.app-card');
 
-      cards.forEach(card => {
-        const haystack = `${card.dataset.appName} ${card.dataset.appDesc}`;
+      allRenderedCards.forEach(card => {
+        const app = appsDatabase.find(a => a.id === card.dataset.id);
+        if (!app) return;
+        const haystack = `${app.name} ${app.desc}`.toLowerCase();
         const show = !q || haystack.includes(q);
         card.classList.toggle('hidden', !show);
         if (show) visibleCount++;
       });
 
+      // Ocultar la sección entera si no tiene resultados dentro
+      document.querySelectorAll('.section').forEach(sec => {
+        const row = sec.querySelector('.apps-row');
+        const visibleInRow = Array.from(row.querySelectorAll('.app-card')).some(c => !c.classList.contains('hidden'));
+        sec.style.display = visibleInRow ? 'block' : 'none';
+      });
+
       emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
     }
 
-    function openAdModal(card) {
-      pendingCard = card;
+    searchInput.addEventListener('input', filterCards);
+
+    // Evento delegado: escucha clicks en cualquier carta de la app
+    contentArea.addEventListener('click', (e) => {
+      const cardEl = e.target.closest('.app-card');
+      if (!cardEl) return;
+      openDetailModal(cardEl.dataset.id);
+    });
+
+    function openDetailModal(appId) {
+      const app = appsDatabase.find(a => a.id === appId);
+      if (!app) return;
+
+      currentDetailCard = app;
+
+      detailHero.src = app.image;
+      detailHero.alt = app.name;
+      detailTitle.textContent = app.name;
+      detailDesc.textContent = app.desc;
+      detailWeight.textContent = app.weight;
+      detailAvailableVersion.textContent = app.versionAvailable;
+      detailLatestVersion.textContent = app.versionLatest;
+
+      // Renderiza las capturas desde el arreglo 'screenshots' propio de cada app
+      if (detailScreenshotsTrack) {
+        detailScreenshotsTrack.innerHTML = app.screenshots.map((src, index) => `
+          <div class="detail-gallery-item">
+            <img src="${src}" alt="Captura ${index + 1} de ${app.name}">
+          </div>
+        `).join('');
+      }
+
+      detailModal.classList.add('show');
+      detailModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('detail-open');
+      document.documentElement.style.overflowX = 'hidden';
+    }
+
+    function closeDetailModal() {
+      detailModal.classList.remove('show');
+      detailModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      document.body.classList.remove('detail-open');
+      document.documentElement.style.overflowX = '';
+      currentDetailCard = null;
+    }
+
+    detailCloseBtn.addEventListener('click', closeDetailModal);
+
+    detailModal.addEventListener('click', (e) => {
+      if (e.target === detailModal) closeDetailModal();
+    });
+
+    detailDownloadBtn.addEventListener('click', () => {
+      if (!currentDetailCard) return;
+      openAdModal();
+    });
+
+    function openAdModal() {
       adWatched = false;
       awaitingReturn = false;
 
@@ -619,20 +1073,10 @@
     function closeAdModal() {
       adModal.classList.remove('show');
       adModal.setAttribute('aria-hidden', 'true');
-      pendingCard = null;
       awaitingReturn = false;
       watchAdBtn.disabled = false;
       watchAdBtn.textContent = 'Ver anuncio';
     }
-
-    searchInput.addEventListener('input', filterCards);
-
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('.install-btn');
-      if (!btn) return;
-      const card = btn.closest('.app-card');
-      openAdModal(card);
-    });
 
     watchAdBtn.addEventListener('click', () => {
       window.open(adsterraUrl, '_blank', 'noopener,noreferrer');
@@ -662,10 +1106,11 @@
     });
 
     linkBtn.addEventListener('click', () => {
-      if (!adWatched) return;
-      const directLink = pendingCard?.dataset.directLink || defaultDirectLink;
+      if (!adWatched || !currentDetailCard) return;
+      const directLink = currentDetailCard.directLink || defaultDirectLink;
       window.open(directLink, '_blank', 'noopener,noreferrer');
       closeAdModal();
+      closeDetailModal();
     });
 
     adModal.addEventListener('click', (e) => {
@@ -675,6 +1120,6 @@
         closeAdModal();
       }
     });
-  </script>
+</script>
 </body>
 </html>
