@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ClyraStore</title>
+<title>ClyraHub</title>
 <style>
     @font-face {
       font-family: 'FuenteClyra';
@@ -44,6 +44,13 @@
       font-family: 'FuenteClyra', Arial, Helvetica, sans-serif;
       max-width: 100vw;
       overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
     }
 
     body {
@@ -169,7 +176,7 @@
       position: relative;
       flex: 0 0 164px;
       width: 164px;
-      height: 286px;
+      height: 275px; /* Altura aumentada en móvil para bajar el botón */
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 22px;
@@ -191,10 +198,10 @@
     }
 
     .app-body {
-      padding: 12px 12px 14px;
+      padding: 12px 12px 10px; /* Reducido espacio inferior para empujar el botón más abajo */
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 2px;
       flex: 1;
       min-height: 0;
     }
@@ -217,7 +224,7 @@
       font-size: 12px;
       line-height: 1.35;
       color: var(--muted);
-      min-height: 48px;
+      min-height: 0;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
@@ -271,7 +278,7 @@
       .app-card {
         flex-basis: 172px;
         width: 172px;
-        height: 294px;
+        height: 260px; /* Reducido para evitar grandes espacios vacíos */
       }
       .app-image {
         height: 118px;
@@ -447,7 +454,7 @@
       margin: 0 auto;
       flex: 1;
       box-sizing: border-box;
-      overflow-x: hidden;
+      overflow-x: visible; /* Cambiado a visible para permitir que el botón estire sin cortarse */
     }
 
     .detail-main > div,
@@ -563,8 +570,8 @@
 
     .detail-gallery-track {
       display: flex;
-      align-items: center; /* Centra verticalmente las horizontales más bajitas con las verticales altas */
-      gap: 6px; /* Espaciado reducido para que estén más pegadas */
+      align-items: center;
+      gap: 6px;
       width: max-content;
       padding-bottom: 8px;
     }
@@ -578,11 +585,10 @@
       box-shadow: none;
     }
 
-    /* Diseño dinámico basado en límites máximos */
     .detail-gallery-item img {
-      max-height: 260px; /* Restaura la altura alta para las verticales */
-      max-width: 250px;  /* Limita el ancho de las horizontales, obligándolas a encogerse */
-      min-width: 140px;  /* Mantiene las verticales 'gorditas' como querías */
+      max-height: 260px;
+      max-width: 250px;
+      min-width: 140px;
       width: auto;
       height: auto;
       display: block;
@@ -598,25 +604,22 @@
     }
 
     .detail-download {
-      position: fixed;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      z-index: 5;
+      position: static;
+      align-self: center;
+      z-index: 1;
       border: none;
       border-radius: 16px;
-      padding: 14px 16px;
+      padding: 14px 22px;
       background: linear-gradient(135deg, var(--primary), var(--primary-2));
       color: #101010;
       font-size: 15px;
       font-weight: 900;
       font-family: 'FuenteClyra', Arial, Helvetica, sans-serif;
       cursor: pointer;
-      width: auto;
+      width: 100%;
       box-sizing: border-box;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-      max-width: none;
-      max-width: calc(100vw - 32px);
+      margin: 16px 0 0 0;
     }
 
     .detail-download:active {
@@ -633,7 +636,7 @@
         font-size: 24px;
       }
       .detail-main {
-        padding: 14px 14px 92px;
+        padding: 14px 14px 16px;
       }
       .detail-topbar {
         padding: 12px 14px;
@@ -641,18 +644,688 @@
       }
 
       .detail-gallery-item img {
-        max-height: 220px; /* Altura original restaurada para móviles */
+        max-height: 220px;
         max-width: 220px;  
         min-width: 125px; 
       }
 
       .detail-download {
-        left: 14px;
-        right: 14px;
-        bottom: 14px;
-        max-width: calc(100vw - 28px);
+        width: 100%;
+        margin-top: 12px;
+        padding: 13px 18px;
+        font-size: 14px;
       }
     }
+
+
+    @media (min-width: 1024px) {
+      .topbar {
+        padding: 20px 32px;
+      }
+
+      .topbar-row {
+        flex-direction: row;
+        align-items: center;
+        gap: 18px;
+        max-width: 1320px;
+        margin: 0 auto;
+      }
+
+      .brand {
+        font-size: 28px;
+        white-space: nowrap;
+      }
+
+      .search-box {
+        margin-top: 0;
+        flex: 1;
+        max-width: 560px;
+        padding: 14px 18px;
+        font-size: 16px;
+        border-radius: 18px;
+      }
+
+      .content {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 28px 32px 40px;
+        gap: 12px;
+      }
+
+      .section-header {
+        margin: 0 2px 14px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .section-subtitle {
+        font-size: 14px;
+      }
+
+      .apps-row {
+        overflow: visible;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 2px 0 0;
+      }
+
+      .app-card {
+        flex: 1 1 190px;
+        width: auto;
+        max-width: 250px;
+        min-width: 190px;
+        height: 245px; /* Reducido drásticamente para quitar el espacio en la parte superior */
+      }
+
+      .app-image {
+        height: 112px;
+      }
+
+      .app-body {
+        padding: 10px;
+        gap: 4px;
+      }
+
+      .app-name {
+        font-size: 14px;
+      }
+
+      .app-desc {
+        font-size: 11px;
+        min-height: 34px;
+      }
+
+      .install-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+
+      .detail-topbar {
+        padding: 18px 28px;
+      }
+
+      .detail-topbar > div {
+        max-width: 1320px;
+        margin: 0 auto;
+      }
+
+      .detail-shell {
+        align-items: center;
+      }
+
+      .detail-main {
+        max-width: 1320px;
+        width: calc(100% - 56px);
+        margin: 0 auto;
+        padding: 24px 0 40px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
+        grid-template-areas:
+          "hero hero"
+          "meta info"
+          "gallery gallery"
+          "download download";
+        gap: 20px;
+      }
+
+      .detail-main > .detail-hero {
+        grid-area: hero;
+        aspect-ratio: auto;
+        height: auto;
+        max-height: 480px;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+
+      .detail-hero img {
+        height: auto;
+        max-height: 480px;
+        object-fit: contain; /* Esto previene el recorte y mantiene su forma original */
+      }
+
+      .detail-main > div:nth-child(2) {
+        grid-area: meta;
+        align-self: start;
+      }
+
+      .detail-main > .detail-info-grid {
+        grid-area: info;
+        align-self: start;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .detail-info:last-child {
+        grid-column: span 1;
+      }
+
+      .detail-main > div:nth-child(4) {
+        grid-area: gallery;
+      }
+
+      .detail-gallery {
+        margin-top: 12px;
+      }
+
+      .detail-gallery-item img {
+        max-height: 300px;
+        max-width: 300px;
+        min-width: 160px;
+      }
+
+      .detail-title {
+        font-size: 34px;
+      }
+
+      .detail-desc {
+        font-size: 15px;
+      }
+
+      .detail-download {
+        position: static;
+        grid-area: download;
+        width: 100%;
+        max-width: 400px;
+        margin-left: auto; /* Centrado correcto */
+        margin-right: auto; /* Centrado correcto */
+        transform: none;
+        left: auto;
+        bottom: auto;
+        justify-self: center;
+        align-self: center;
+        padding: 16px 22px;
+        font-size: 16px;
+        border-radius: 18px; /* Bordes redondeados */
+      }
+
+      .modal-box {
+        max-width: 420px;
+        padding: 22px;
+      }
+
+      .modal-actions {
+        flex-direction: row;
+      }
+
+      .modal-btn {
+        width: auto;
+        min-width: 150px;
+        flex: 1;
+      }
+    }
+
+
+    @media (min-width: 1200px) {
+      .topbar {
+        padding: 20px 40px;
+      }
+
+      .topbar-row {
+        max-width: 1440px;
+      }
+
+      .content {
+        max-width: 1440px;
+        padding: 30px 40px 44px;
+        gap: 12px;
+      }
+
+      .section-header {
+        margin-bottom: 16px;
+      }
+
+      .apps-row {
+        gap: 18px;
+      }
+
+      .app-card {
+        flex: 1 1 196px;
+        min-width: 196px;
+        max-width: 260px;
+        height: 245px;
+      }
+
+      .app-image {
+        height: 118px;
+      }
+
+      .detail-topbar {
+        padding: 18px 36px;
+      }
+
+      .detail-topbar > div {
+        max-width: 1440px;
+      }
+
+      .detail-main {
+        max-width: 1440px;
+        width: calc(100% - 72px);
+        padding: 26px 0 44px;
+        grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+        grid-template-areas:
+          "meta meta"
+          "hero info"
+          "gallery gallery"
+          "download download";
+        gap: 22px;
+      }
+
+      .detail-main > .detail-hero {
+        aspect-ratio: auto;
+        height: auto;
+        max-height: 480px;
+      }
+
+      .detail-main > .detail-info-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .detail-info:last-child {
+        grid-column: span 1;
+      }
+
+      .detail-title {
+        font-size: 36px;
+      }
+
+      .detail-desc {
+        font-size: 15px;
+        max-width: 980px;
+      }
+
+      .detail-gallery-item img {
+        max-height: 320px;
+        max-width: 320px;
+        min-width: 170px;
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .topbar-row,
+      .content,
+      .detail-topbar > div,
+      .detail-main {
+        max-width: 1560px;
+      }
+
+      .content {
+        padding-left: 48px;
+        padding-right: 48px;
+      }
+
+      .app-card {
+        max-width: 340px;
+        min-width: 250px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-width: 1023px) and (max-height: 700px) {
+      .topbar {
+        padding: 10px 14px;
+      }
+
+      .topbar-row {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand {
+        font-size: 20px;
+        white-space: nowrap;
+      }
+
+      .search-box {
+        margin-top: 0;
+        padding: 10px 12px;
+        font-size: 14px;
+        border-radius: 14px;
+      }
+
+      .content {
+        padding: 14px 12px 18px;
+        gap: 14px;
+      }
+
+      .section-header {
+        margin-bottom: 8px;
+      }
+
+      .section-title {
+        font-size: 17px;
+      }
+
+      .section-subtitle {
+        font-size: 12px;
+      }
+
+      .apps-row {
+        gap: 10px;
+        padding-bottom: 6px;
+      }
+
+      .app-card {
+        flex-basis: 150px;
+        width: 150px;
+        height: 220px; 
+      }
+
+      .app-image {
+        height: 94px;
+      }
+
+      .app-body {
+        padding: 10px;
+        gap: 4px;
+      }
+
+      .app-name {
+        font-size: 15px;
+      }
+
+      .app-desc {
+        font-size: 11px;
+        min-height: 32px;
+      }
+
+      .install-btn {
+        padding: 9px 10px;
+        font-size: 12px;
+      }
+
+      .detail-topbar {
+        padding: 10px 12px;
+      }
+
+      .detail-main {
+        padding: 12px 12px 86px;
+        gap: 12px;
+      }
+
+      .detail-title {
+        font-size: 22px;
+      }
+
+      .detail-desc {
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .detail-info-grid {
+        gap: 8px;
+      }
+
+      .detail-info {
+        padding: 10px;
+      }
+
+      .detail-info-value {
+        font-size: 13px;
+      }
+
+      .detail-gallery-item img {
+        max-height: 200px;
+        max-width: 200px;
+        min-width: 115px;
+      }
+
+      .detail-download {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 14px;
+      }
+
+      .modal-box {
+        max-width: 380px;
+      }
+    }
+
+    /* Forzar estilo de escritorio en PC aunque la ventana sea pequeña */
+    html.desktop-device, body.desktop-device {
+      min-width: 100%;
+    }
+
+    .desktop-device .topbar {
+      padding: 20px 32px;
+    }
+
+    .desktop-device .topbar-row {
+      flex-direction: row;
+      align-items: center;
+      gap: 18px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .desktop-device .brand {
+      font-size: 28px;
+      white-space: nowrap;
+    }
+
+    .desktop-device .search-box {
+      margin-top: 0;
+      flex: 1;
+      max-width: 560px;
+      padding: 14px 18px;
+      font-size: 16px;
+      border-radius: 18px;
+    }
+
+    .desktop-device .content {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 32px 40px;
+      gap: 12px;
+    }
+
+    .desktop-device .section-header {
+      margin: 0 2px 14px;
+    }
+
+    .desktop-device .section-title {
+      font-size: 24px;
+    }
+
+    .desktop-device .section-subtitle {
+      font-size: 14px;
+    }
+
+    .desktop-device .apps-row {
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-wrap: nowrap;
+      gap: 16px;
+      padding: 2px 2px 12px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .desktop-device .apps-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .desktop-device .app-card {
+      flex: 0 0 190px;
+      width: 190px;
+      max-width: none;
+      min-width: 190px;
+      height: 245px;
+      scroll-snap-align: start;
+    }
+
+    .desktop-device .app-image {
+      height: 106px;
+    }
+
+    .desktop-device .app-body {
+      padding: 10px;
+      gap: 4px;
+    }
+
+    .desktop-device .app-name {
+      font-size: 14px;
+    }
+
+    .desktop-device .app-desc {
+      font-size: 10px;
+      min-height: 32px;
+    }
+
+    .desktop-device .install-btn {
+      padding: 8px 11px;
+      font-size: 11px;
+    }
+
+    .desktop-device .detail-topbar {
+      padding: 18px 28px;
+    }
+
+    .desktop-device .detail-topbar > div {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .desktop-device .detail-main {
+      max-width: min(1240px, calc(100vw - 72px));
+      width: min(1240px, calc(100vw - 72px));
+      padding: 26px 0 44px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      grid-template-areas:
+        "meta meta"
+        "hero info"
+        "gallery gallery"
+        "download download";
+      gap: 22px;
+      align-items: start;
+    }
+
+    .desktop-device .detail-main > div:nth-of-type(1) { grid-area: hero; }
+    .desktop-device .detail-main > div:nth-of-type(2) { grid-area: meta; }
+    .desktop-device .detail-main > .detail-info-grid { grid-area: info; align-self: start; }
+    .desktop-device .detail-main > div:nth-of-type(4) { grid-area: gallery; }
+
+    .desktop-device .detail-main > .detail-hero {
+      aspect-ratio: auto;
+      height: auto;
+      max-height: 480px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .desktop-device .detail-hero img {
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      border-radius: 18px;
+    }
+
+    .desktop-device .detail-info-grid {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      width: 340px;
+    }
+
+    .desktop-device .detail-info:last-child {
+      grid-column: span 1;
+    }
+
+    .desktop-device .detail-title {
+      font-size: 36px;
+    }
+
+    .desktop-device .detail-desc {
+      font-size: 15px;
+      max-width: 980px;
+    }
+
+    .desktop-device .detail-gallery-item img {
+      max-height: 320px;
+      max-width: 320px;
+      min-width: 170px;
+    }
+
+    .desktop-device .detail-download {
+      position: static;
+      width: 100%;
+      min-width: 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      left: auto;
+      transform: none;
+      right: auto;
+      bottom: auto;
+      justify-self: center;
+      align-self: center;
+      padding: 16px 22px;
+      font-size: 16px;
+      border-radius: 18px;
+    }
+
+    .desktop-device .modal-box {
+      max-width: 420px;
+      padding: 22px;
+    }
+
+    .desktop-device .modal-actions {
+      flex-direction: row;
+    }
+
+    .desktop-device .modal-btn {
+      width: auto;
+      min-width: 150px;
+      flex: 1;
+    }
+
+    .desktop-device .detail-close {
+      width: 44px;
+      height: 44px;
+    }
+
+    .desktop-device html,
+    .desktop-device body {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .desktop-device html::-webkit-scrollbar,
+    .desktop-device body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .desktop-device .detail-topbar,
+    .desktop-device .topbar,
+    .desktop-device .content,
+    .desktop-device .detail-main,
+    .desktop-device .topbar-row,
+    .desktop-device .detail-topbar > div {
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 1600px) {
+      .desktop-device .topbar-row,
+      .desktop-device .content,
+      .desktop-device .detail-topbar > div,
+      .desktop-device .detail-main {
+        max-width: 1240px;
+      }
+
+      .desktop-device .content {
+        padding-left: 48px;
+        padding-right: 48px;
+      }
+
+      .desktop-device .app-card {
+        max-width: 190px;
+        min-width: 190px;
+      }
+    }
+
 
     /* Visor a pantalla completa de las capturas (Lightbox) */
     .lightbox-overlay {
@@ -688,7 +1361,7 @@
 <div class="app">
   <header class="topbar">
     <div class="topbar-row">
-      <div class="brand">ClyraStore</div>
+      <div class="brand">ClyraHub</div>
       <input aria-label="Buscar aplicaciones" class="search-box" id="searchInput" placeholder="Buscar aplicaciones..." type="search"/>
     </div>
   </header>
@@ -703,6 +1376,16 @@
         </div>
       </div>
       <div class="apps-row" id="row-destacadas"></div>
+    </section>
+
+    <section class="section" id="section-pc">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">PC</h2>
+          <p class="section-subtitle">Juegos exclusivos de PC</p>
+        </div>
+      </div>
+      <div class="apps-row" id="row-pc"></div>
     </section>
 
     <section class="section" id="section-nuevas">
@@ -770,13 +1453,13 @@
 
 <div aria-hidden="true" class="modal-overlay" id="adModal">
   <div aria-labelledby="adModalTitle" aria-modal="true" class="modal-box" role="dialog">
-    <h3 class="modal-title" id="adModalTitle">Ver anuncio para continuar</h3>
-    <p class="modal-text">Cuando toques Ver anuncio se abrirá el anuncio en otra pestaña. Después vuelve a la aplicación y el enlace de MediaFire se desbloqueará.</p>
+    <h3 class="modal-title" id="adModalTitle">Ver 2 anuncios para continuar</h3>
+    <p class="modal-text">Cuando toques Ver anuncio se abrirá el anuncio en otra pestaña. Después vuelve a la aplicación y repite el proceso dos veces para desbloquear el enlace de MediaFire.</p>
     <div class="modal-actions">
       <button class="modal-btn ad" id="watchAdBtn" type="button">Ver anuncio</button>
       <button class="modal-btn link" disabled="" id="linkBtn" type="button">Botón de enlace bloqueado</button>
     </div>
-    <div class="ad-status" id="adStatus">Toca Ver anuncio, vuelve a la aplicación y el enlace de MediaFire se desbloqueará.</div>
+    <div class="ad-status" id="adStatus">Toca Ver anuncio dos veces, vuelve a la aplicación después de cada anuncio y el enlace de MediaFire se desbloqueará.</div>
   </div>
 </div>
 
@@ -787,10 +1470,25 @@
 <script>
     // ----------------------------------------------------------------------
     // 1. BASE DE DATOS DE APLICACIONES (El "cajón" central de datos)
-    // Aquí defines la información UNA SOLA VEZ y controlas dónde sale con "tags"
     // ----------------------------------------------------------------------
-    const appsDatabase = [
-{
+    let appsDatabase = [
+      {
+        id: "exposed-livestream",
+        name: "Exposed Livestream",
+        desc: "¡Transmite en directo de día, gasta bromas de noche y alcanza la fama en este juego de rol y aventuras! En la piel de Laika, una streamer de la vida real, crea contenido, consigue suscriptores y mejora tus habilidades. Explora la ciudad y arriésgalo todo para entretener a tu creciente audiencia. ¡Muéstrales lo que realmente quieren ver!",
+        image: "https://i.ibb.co/LD3CbgyQ/IMG-20260626-114141.png",
+        screenshots: [
+          "https://i.postimg.cc/QtPbx722/1.png",
+          "https://i.postimg.cc/63S05Zkg/2.png",
+          "https://i.postimg.cc/8c6bF5Gw/4.png"
+        ],
+        directLink: "https://www.mediafire.com/file/r2bt0myw6wudhak/EL_%2528En_espa%25C3%25B1ol_por_DarkEros177%2529.rar/file",
+        versionAvailable: "🚫 No Especificado",
+        versionLatest: "ℹ️ v1.2",
+        weight: "📦 302 MB",
+        tags: ["Pc"]
+      },
+      {
         id: "barely-working",
         name: "Barely Working",
         desc: "Juega como Candace, la zorrita de la oficina, que tiene que terminar un informe para el final del día. Por desgracia, sus compañeros están acostumbrados a ir a su escritorio para echar un polvo rápido. Candace tiene que gestionar tanto su informe como a sus compañeros a lo largo de la jornada.",
@@ -805,8 +1503,8 @@
         versionLatest: "ℹ️ v14.0.1",
         weight: "📦  77 MB",
         tags: ["nuevas"]
-},
-{
+      },
+      {
         id: "live-with-my-sis",
         name: "Live with My Sis",
         desc: "Un día, solo estábamos mi hermana y yo. Una simulación de la vida cotidiana con mi hermana traviesa. Eres un hermano mayor que ha empezado a vivir con su hermana.» «A medida que pasáis los días juntos —viendo la tele y ayudándola a estudiar— las cosas empiezan a cambiar…",
@@ -821,8 +1519,8 @@
         versionLatest: "🚫  No Especificado",
         weight: "📦  168 MB",
         tags: ["nuevas"]
-},
-{
+      },
+      {
         id: "daily-lives-of-my-countryside",
         name: "Daily Lives of My Countryside",
         desc: "Un chico regresa a su casa en el campo para continuar sus estudios. Sigámoslo para disfrutar de la hermosa vida rural.",
@@ -837,7 +1535,7 @@
         versionLatest: "ℹ️ v0.3.3.1",
         weight: "📦 345 MB",
         tags: ["nuevas"]
-},
+      },
       {
         id: "succubus-hunt",
         name: "Succubus Hunt",
@@ -1015,6 +1713,7 @@
     const detailWeight = document.getElementById('detailWeight');
     const detailAvailableVersion = document.getElementById('detailAvailableVersion');
     const detailLatestVersion = document.getElementById('detailLatestVersion');
+    const detailAvailableVersionLabel = document.querySelector('#detailAvailableVersion').previousElementSibling;
     const detailScreenshotsTrack = document.getElementById('detailScreenshotsTrack');
     const detailDownloadBtn = document.getElementById('detailDownloadBtn');
 
@@ -1026,20 +1725,31 @@
     const screenshotLightbox = document.getElementById('screenshotLightbox');
     const lightboxImg = document.getElementById('lightboxImg');
 
+    const isDesktopDevice = window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(pointer: coarse)').matches;
+    if (isDesktopDevice) {
+      document.documentElement.classList.add('desktop-device');
+      document.body.classList.add('desktop-device');
+    }
+
+
     const adsterraUrl = 'https://www.effectivecpmnetwork.com/pebktxz1?key=28ccb1c2d5f2bc6691f2610c6b05f11e';
     const defaultDirectLink = 'https://www.mediafire.com/file/ejemplo/archivo.zip/file';
 
     let adWatched = false;
     let awaitingReturn = false;
     let currentDetailCard = null;
+    const adsRequired = 2;
+    let adsCompleted = 0;
 
     // Función para renderizar el HTML basado en los datos
     function renderApps() {
       const rowDestacadas = document.getElementById('row-destacadas');
+      const rowPc = document.getElementById('row-pc');
       const rowNuevas = document.getElementById('row-nuevas');
       const rowRecomendadas = document.getElementById('row-recomendadas');
 
       rowDestacadas.innerHTML = '';
+      rowPc.innerHTML = '';
       rowNuevas.innerHTML = '';
       rowRecomendadas.innerHTML = '';
 
@@ -1056,12 +1766,26 @@
         `;
 
         if (app.tags.includes('destacadas')) rowDestacadas.innerHTML += cardHTML;
+        if (app.tags.includes('Pc')) rowPc.innerHTML += cardHTML;
         if (app.tags.includes('nuevas')) rowNuevas.innerHTML += cardHTML;
         if (app.tags.includes('recomendadas')) rowRecomendadas.innerHTML += cardHTML;
       });
     }
 
-    renderApps();
+    // Inicialización: intentamos leer primero desde Data.json por prioridad
+    fetch('Data.json')
+      .then(response => {
+        if (!response.ok) throw new Error('Data.json no encontrado, utilizando base interna.');
+        return response.json();
+      })
+      .then(data => {
+        appsDatabase = data;
+        renderApps();
+      })
+      .catch(error => {
+        console.log(error.message);
+        renderApps(); 
+      });
 
     // ----------------------------------------------------------------------
     // 3. LÓGICA DE BÚSQUEDA Y MODALES
@@ -1108,6 +1832,9 @@
       detailTitle.textContent = app.name;
       detailDesc.textContent = app.desc;
       detailWeight.textContent = app.weight;
+      if (detailAvailableVersionLabel) {
+        detailAvailableVersionLabel.textContent = app.tags.includes('Pc') ? 'Versión de PC' : 'Versión de android';
+      }
       detailAvailableVersion.textContent = app.versionAvailable;
       detailLatestVersion.textContent = app.versionLatest;
 
@@ -1149,11 +1876,12 @@
     function openAdModal() {
       adWatched = false;
       awaitingReturn = false;
+      adsCompleted = 0;
 
       linkBtn.disabled = true;
       linkBtn.classList.remove('enabled');
       linkBtn.textContent = 'Botón de enlace bloqueado';
-      adStatus.textContent = 'Toca Ver anuncio, vuelve a la aplicación y el enlace de MediaFire se desbloqueará.';
+      adStatus.textContent = `Toca Ver anuncio ${adsRequired} veces, vuelve a la aplicación después de cada anuncio y el enlace de MediaFire se desbloqueará.`;
       adStatus.classList.remove('success');
 
       adModal.classList.add('show');
@@ -1173,21 +1901,30 @@
       watchAdBtn.disabled = true;
       watchAdBtn.textContent = 'Abriendo anuncio...';
       awaitingReturn = true;
-      adStatus.textContent = 'Se abrió el anuncio. Vuelve a la aplicación para desbloquear el enlace de MediaFire.';
+      adStatus.textContent = `Se abrió el anuncio ${adsCompleted + 1}/${adsRequired}. Vuelve a la aplicación para continuar.`;
       adStatus.classList.remove('success');
     });
 
     function unlockLinkOnReturn() {
       if (!awaitingReturn || adWatched) return;
-      adWatched = true;
+
+      adsCompleted += 1;
       awaitingReturn = false;
       watchAdBtn.disabled = false;
       watchAdBtn.textContent = 'Ver anuncio';
-      linkBtn.disabled = false;
-      linkBtn.classList.add('enabled');
-      linkBtn.textContent = 'Enlace desbloqueado';
-      adStatus.textContent = 'Ya volviste a la aplicación. El enlace de MediaFire está desbloqueado.';
-      adStatus.classList.add('success');
+
+      if (adsCompleted >= adsRequired) {
+        adWatched = true;
+        linkBtn.disabled = false;
+        linkBtn.classList.add('enabled');
+        linkBtn.textContent = 'Enlace desbloqueado';
+        adStatus.textContent = 'Ya volviste a la aplicación. El enlace de MediaFire está desbloqueado.';
+        adStatus.classList.add('success');
+      } else {
+        const remaining = adsRequired - adsCompleted;
+        adStatus.textContent = `Anuncio completado ${adsCompleted}/${adsRequired}. Te falta ${remaining} más para desbloquear el enlace.`;
+        adStatus.classList.remove('success');
+      }
     }
 
     window.addEventListener('focus', unlockLinkOnReturn);
