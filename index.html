@@ -1823,6 +1823,8 @@
 
 
     const adsterraUrl = 'https://www.effectivecpmnetwork.com/pebktxz1?key=28ccb1c2d5f2bc6691f2610c6b05f11e';
+    const omg10Url = 'https://omg10.com/4/11019975';
+    const adUrls = [adsterraUrl, omg10Url];
     const defaultDirectLink = 'https://www.mediafire.com/file/ejemplo/archivo.zip/file';
 
     let adWatched = false;
@@ -1987,7 +1989,8 @@
     }
 
     watchAdBtn.addEventListener('click', () => {
-      window.open(adsterraUrl, '_blank', 'noopener,noreferrer');
+      const adUrl = adUrls[adsCompleted] || adUrls[adUrls.length - 1];
+      window.open(adUrl, '_blank', 'noopener,noreferrer');
       watchAdBtn.disabled = true;
       watchAdBtn.textContent = 'Abriendo anuncio...';
       awaitingReturn = true;
